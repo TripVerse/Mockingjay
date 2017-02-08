@@ -89,14 +89,17 @@ public class MockingjayProtocol: URLProtocol {
   
   override open func startLoading() {
     if let stub = MockingjayProtocol.stubForRequest(request) {
-      let response = stub.builder(request)
-      if let delay = stub.delay {
-        DispatchQueue.global().asyncAfter(deadline: DispatchTime.now() + delay) {
-          self.sendResponse(response)
-        }
-      } else {
-        sendResponse(response)
-      }
+      let handler = stub.builder(request,
+        {
+          (response) in
+          if let delay = stub.delay {
+            DispatchQueue.global().asyncAfter(deadline: DispatchTime.now() + delay) {
+              self.sendResponse(response)
+            }
+          } else {
+            self.sendResponse(response)
+          }
+        })
     } else {
       let error = NSError(domain: NSExceptionName.internalInconsistencyException.rawValue, code: 0, userInfo: [ NSLocalizedDescriptionKey: "Handling request without a matching stub." ])
       client?.urlProtocol(self, didFailWithError: error)

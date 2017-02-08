@@ -9,6 +9,17 @@
 import Foundation
 
 // Collection of generic builders
+public func convertFromGetToPost(_ status:Int = 200, headers:[String:String]? = nil, download:Download=nil) -> (_ request: URLRequest) -> Response {
+  return { (request:URLRequest) in
+    //TODO: Perform request
+    
+    if let response = HTTPURLResponse(url: request.url!, statusCode: status, httpVersion: nil, headerFields: headers) {
+      return Response.success(response, download)
+    }
+    
+    return .failure(NSError(domain: NSExceptionName.internalInconsistencyException.rawValue, code: 0, userInfo: [NSLocalizedDescriptionKey: "Failed to construct response for stub."]))
+  }
+}
 
 /// Generic builder for returning a failure
 public func failure(_ error: NSError) -> (_ request: URLRequest) -> Response {
