@@ -24,6 +24,8 @@
 		444EA6091C5261DE000C3A9F /* MockingjayAsyncProtocolTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 444EA6081C5261DE000C3A9F /* MockingjayAsyncProtocolTests.swift */; };
 		444EA60C1C52666D000C3A9F /* TestAudio.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 444EA60B1C52666D000C3A9F /* TestAudio.m4a */; };
 		A1E3C5701AA4EA130069C998 /* XCTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2743679B1AA28D4D0030C97B /* XCTest.swift */; };
+		C958F9A71E4C054D003A22A8 /* URL+queryItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = C958F9A61E4C054D003A22A8 /* URL+queryItems.swift */; };
+		C958F9A81E4C054D003A22A8 /* URL+queryItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = C958F9A61E4C054D003A22A8 /* URL+queryItems.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -88,6 +90,7 @@
 		27703A621CE2560600194732 /* MockingjayURLSessionConfiguration.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MockingjayURLSessionConfiguration.m; sourceTree = "<group>"; };
 		444EA6081C5261DE000C3A9F /* MockingjayAsyncProtocolTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockingjayAsyncProtocolTests.swift; sourceTree = "<group>"; };
 		444EA60B1C52666D000C3A9F /* TestAudio.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = TestAudio.m4a; sourceTree = "<group>"; };
+		C958F9A61E4C054D003A22A8 /* URL+queryItems.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "URL+queryItems.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -147,6 +150,7 @@
 			isa = PBXGroup;
 			children = (
 				2746CDC41A702F7800719B66 /* Mockingjay.h */,
+				C958F9A61E4C054D003A22A8 /* URL+queryItems.swift */,
 				274367911AA27A7C0030C97B /* Mockingjay.swift */,
 				274367971AA28AFC0030C97B /* Matchers.swift */,
 				274367AF1AA29E510030C97B /* Builders.swift */,
@@ -174,8 +178,8 @@
 				274367951AA27B170030C97B /* MockingjayProtocolTests.swift */,
 				444EA6081C5261DE000C3A9F /* MockingjayAsyncProtocolTests.swift */,
 				274367991AA28B0D0030C97B /* MatcherTests.swift */,
-				274367B11AA29E620030C97B /* BuildersTests.swift */,
 				2705946A1C4FA7A6002A3AA9 /* MockingjayXCTestTests.swift */,
+				274367B11AA29E620030C97B /* BuildersTests.swift */,
 				444EA60D1C526673000C3A9F /* Resources */,
 				2746CDCF1A702F7800719B66 /* Supporting Files */,
 			);
@@ -362,6 +366,7 @@
 				274367921AA27A7C0030C97B /* Mockingjay.swift in Sources */,
 				A1E3C5701AA4EA130069C998 /* XCTest.swift in Sources */,
 				274367C61AA35FD00030C97B /* NSURLSessionConfiguration.swift in Sources */,
+				C958F9A71E4C054D003A22A8 /* URL+queryItems.swift in Sources */,
 				274367941AA27AAD0030C97B /* MockingjayProtocol.swift in Sources */,
 				274367B01AA29E510030C97B /* Builders.swift in Sources */,
 			);
@@ -372,6 +377,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2743679A1AA28B0D0030C97B /* MatcherTests.swift in Sources */,
+				C958F9A81E4C054D003A22A8 /* URL+queryItems.swift in Sources */,
 				274367961AA27B170030C97B /* MockingjayProtocolTests.swift in Sources */,
 				444EA6091C5261DE000C3A9F /* MockingjayAsyncProtocolTests.swift in Sources */,
 				274367B21AA29E620030C97B /* BuildersTests.swift in Sources */,
@@ -475,8 +481,8 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = macosx;
-				SWIFT_VERSION = 3.0;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_VERSION = 3.0;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};

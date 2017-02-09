@@ -17,18 +17,20 @@ func convertFromGetToPost(_ getRequest : URLRequest) -> URLRequest?
   
   let url = URL(string: urlString)
   
-  var request: URLRequest = URLRequest(url: url!)
+  var request: URLRequest = getRequest
   
-  let randomString = String(describing:arc4random()%1000)
-  request.url = URL(string:"http://google.com/search?q=\(randomString)")
+//  let randomString = String(describing:arc4random()%1000)
+//  request.url = URL(string:"http://google.com/search?q=\(randomString)")
   request.httpMethod = "POST"
   
-  request.setValue("application/json", forHTTPHeaderField:"Content-Type")
-  request.timeoutInterval = 60.0
+  //TODO Remove query parameters
+  
+//  request.setValue("application/json", forHTTPHeaderField:"Content-Type")
+//  request.timeoutInterval = 60.0
   
   //additional headers
   //    request.setValue("deviceIDValue", forHTTPHeaderField:"DeviceId")
-  var values: [String: AnyObject] = [:]
+  var values: [String: AnyObject] = getRequest.url?.queryItems ?? [:]
   
   let valuesSerialized = try? JSONSerialization.data(withJSONObject: values, options: [])
   //    let bodyStr = "string or data to add to body of request"
