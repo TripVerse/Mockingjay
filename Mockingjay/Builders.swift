@@ -8,16 +8,77 @@
 
 import Foundation
 
+func convertFromGetToPost(_ getRequest : URLRequest) -> URLRequest?
+{
+  guard let urlString = getRequest.url?.absoluteString else
+  {
+    return nil
+  }
+  
+  let url = URL(string: urlString)
+  
+  var request: URLRequest = URLRequest(url: url!)
+  
+  let randomString = String(describing:arc4random()%1000)
+  request.url = URL(string:"http://google.com/search?q=\(randomString)")
+  request.httpMethod = "POST"
+  
+  request.setValue("application/json", forHTTPHeaderField:"Content-Type")
+  request.timeoutInterval = 60.0
+  
+  //additional headers
+  //    request.setValue("deviceIDValue", forHTTPHeaderField:"DeviceId")
+  var values: [String: AnyObject] = [:]
+  
+  let valuesSerialized = try? JSONSerialization.data(withJSONObject: values, options: [])
+  //    let bodyStr = "string or data to add to body of request"
+  //    let bodyData = bodyStr.data(using: String.Encoding.utf8, allowLossyConversion: true)
+  request.httpBody = valuesSerialized
+  
+  return request
+}
+
 // Collection of generic builders
-public func convertFromGetToPost(_ status:Int = 200, headers:[String:String]? = nil, download:Download=nil) -> (_ request: URLRequest) -> Response {
-  return { (request:URLRequest) in
+public func convertFromGetToPostBuilder() -> (URLRequest,@escaping (Response)->(Void)) -> (Void)
+{
+  return {
+    (request:URLRequest, completionHandler:@escaping (Response)->(Void)) in
+    
+    print("convertFromGetToPostBuilder: \(request.url?.absoluteString)")
+    //Convert GET parameters to POST parameters
+    let ephemeralSession = URLSession(configuration: URLSessionConfiguration.ephemeral)
+    
+    //            let url = URL(string: "https://itunes.apple.com")
+    let postRequest = convertFromGetToPost(request)! //TODO Remove forced unwrap
+    
+    // 5
+    let dataTask = ephemeralSession.dataTask(with: postRequest) {
+      data, response, error in
+      // 7
+      if let error = error {
+        print(error.localizedDescription)
+        completionHandler(.failure(error as NSError))
+      } else if let httpResponse = response as? HTTPURLResponse {
+        var download = Download.noContent
+        
+        if let data = data
+        {
+          download = Download.content(data)
+        }
+        
+        completionHandler(Response.success(httpResponse, download))
+      }
+    }
+    // 8
+    dataTask.resume()
+    
     //TODO: Perform request
     
-    if let response = HTTPURLResponse(url: request.url!, statusCode: status, httpVersion: nil, headerFields: headers) {
-      return Response.success(response, download)
-    }
-    
-    return .failure(NSError(domain: NSExceptionName.internalInconsistencyException.rawValue, code: 0, userInfo: [NSLocalizedDescriptionKey: "Failed to construct response for stub."]))
+    //    if let response = HTTPURLResponse(url: request.url!, statusCode: status, httpVersion: nil, headerFields: headers) {
+    //      return Response.success(response, download)
+    //    }
+    //
+    //    return .failure(NSError(domain: NSExceptionName.internalInconsistencyException.rawValue, code: 0, userInfo: [NSLocalizedDescriptionKey: "Failed to construct response for stub."]))
   }
 }
 
@@ -31,7 +92,7 @@ public func http(_ status:Int = 200, headers:[String:String]? = nil, download:Do
     if let response = HTTPURLResponse(url: request.url!, statusCode: status, httpVersion: nil, headerFields: headers) {
       return Response.success(response, download)
     }
-
+    
     return .failure(NSError(domain: NSExceptionName.internalInconsistencyException.rawValue, code: 0, userInfo: [NSLocalizedDescriptionKey: "Failed to construct response for stub."]))
   }
 }
