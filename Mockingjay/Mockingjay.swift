@@ -53,4 +53,4 @@ public func ==(lhs:Response, rhs:Response) -> Bool {
 }
 
 public typealias Matcher = (URLRequest) -> (Bool)
-public typealias Builder = (URLRequest, (Response)->(Void)) -> (Void)
+public typealias Builder = (URLRequest, @escaping (Response)->(Void)) -> (Void)

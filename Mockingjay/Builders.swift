@@ -8,7 +8,32 @@
 
 import Foundation
 
-func convertFromGetToPost(_ getRequest : URLRequest) -> URLRequest?
+private func convertToUrlEncodedString(string : String) -> String {
+  var urlEncodedString = string.replacingOccurrences(of: " ", with: "+")
+  
+  let customAllowedSet =  NSCharacterSet(charactersIn: "").inverted
+  
+  urlEncodedString = urlEncodedString.addingPercentEncoding(withAllowedCharacters: customAllowedSet)!
+  
+  return urlEncodedString
+}
+
+private func convertToQueryString(dictionary : [String : String]) -> String {
+  var urlString = ""
+  
+  for (paramNameObject, paramValueObject) in dictionary {
+    let paramNameEncoded = convertToUrlEncodedString(string: paramNameObject)
+    let paramValueEncoded = convertToUrlEncodedString(string: paramValueObject)
+    
+    let oneUrlPiece = paramNameEncoded + "=" + paramValueEncoded
+    
+    urlString = urlString + (urlString == "" ? "" : "&") + oneUrlPiece
+  }
+  
+  return urlString
+}
+
+private func convertFromGetToPost(_ getRequest : URLRequest) -> URLRequest?
 {
   guard let urlString = getRequest.url?.absoluteString else
   {
@@ -18,24 +43,17 @@ func convertFromGetToPost(_ getRequest : URLRequest) -> URLRequest?
   let url = URL(string: urlString)
   
   var request: URLRequest = getRequest
-  
-//  let randomString = String(describing:arc4random()%1000)
-//  request.url = URL(string:"http://google.com/search?q=\(randomString)")
   request.httpMethod = "POST"
   
-  //TODO Remove query parameters
+  //Remove query parameters
+  request.url = getRequest.url?.removingQueryItems()
   
-//  request.setValue("application/json", forHTTPHeaderField:"Content-Type")
-//  request.timeoutInterval = 60.0
+  var values: [String: String] = getRequest.url?.queryItems ?? [:]
   
-  //additional headers
-  //    request.setValue("deviceIDValue", forHTTPHeaderField:"DeviceId")
-  var values: [String: AnyObject] = getRequest.url?.queryItems ?? [:]
+  //  let valuesSerialized = try? JSONSerialization.data(withJSONObject: values, options: .prettyPrinted)
   
-  let valuesSerialized = try? JSONSerialization.data(withJSONObject: values, options: [])
-  //    let bodyStr = "string or data to add to body of request"
-  //    let bodyData = bodyStr.data(using: String.Encoding.utf8, allowLossyConversion: true)
-  request.httpBody = valuesSerialized
+  let queryString = convertToQueryString(dictionary:values)
+  request.httpBody = queryString.data(using: .utf8, allowLossyConversion: true)
   
   return request
 }
@@ -46,7 +64,7 @@ public func convertFromGetToPostBuilder() -> (URLRequest,@escaping (Response)->(
   return {
     (request:URLRequest, completionHandler:@escaping (Response)->(Void)) in
     
-    print("convertFromGetToPostBuilder: \(request.url?.absoluteString)")
+    //    print("convertFromGetToPostBuilder: \(request.url?.absoluteString)")
     //Convert GET parameters to POST parameters
     let ephemeralSession = URLSession(configuration: URLSessionConfiguration.ephemeral)
     
