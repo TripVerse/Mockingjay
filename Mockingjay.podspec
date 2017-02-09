@@ -16,6 +16,7 @@ Pod::Spec.new do |spec|
     core_spec.source_files = 'Mockingjay/Mockingjay.{h,swift}',
         'Mockingjay/MockingjayProtocol.swift',
         'Mockingjay/{Matchers,Builders}.swift',
+        'Mockingjay/URL+queryItems.swift',
         'Mockingjay/NSURLSessionConfiguration.swift',
         'Mockingjay/MockingjayURLSessionConfiguration.m'
   end
