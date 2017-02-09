@@ -7,6 +7,14 @@
 //
 
 extension URL {
+  func removingQueryItems() -> URL?
+  {
+    guard var components = URLComponents(url: self, resolvingAgainstBaseURL: false) else {return nil}
+    components.query = nil     // remove the query
+    components.fragment = nil // probably want to strip this too for good measure
+    return components.url
+  }
+  
   var queryItems: [String: String]? {
     return URLComponents(url: self, resolvingAgainstBaseURL: false)?
       .queryItems?

@@ -69,7 +69,11 @@ public func convertFromGetToPostBuilder() -> (URLRequest,@escaping (Response)->(
     let ephemeralSession = URLSession(configuration: URLSessionConfiguration.ephemeral)
     
     //            let url = URL(string: "https://itunes.apple.com")
-    let postRequest = convertFromGetToPost(request)! //TODO Remove forced unwrap
+    guard let postRequest = convertFromGetToPost(request) else {
+      let error = NSError(domain: NSCocoaErrorDomain, code: 0, userInfo: [NSLocalizedDescriptionKey:"Failed converting from GET request to POST request"])
+      completionHandler(.failure(error))
+      return
+    }
     
     // 5
     let dataTask = ephemeralSession.dataTask(with: postRequest) {
